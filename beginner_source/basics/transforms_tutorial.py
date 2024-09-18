@@ -26,18 +26,31 @@ For training, we need the features as normalized tensors, and the labels as one-
 To make these transformations, we use ``ToTensor`` and ``Lambda``.
 """
 
+# import os
 import torch
-from torchvision import datasets
+# from torchvision import datasets
 from torchvision.transforms import ToTensor, Lambda
+from data_download import ds
 
-ds = datasets.FashionMNIST(
-    root="data",
-    train=True,
-    download=True,
-    transform=ToTensor(),
-    target_transform=Lambda(lambda y: torch.zeros(10, dtype=torch.float).scatter_(0, torch.tensor(y), value=1))
-)
 
+# cwd = os.path.dirname(__file__)
+# try:
+#     ds = datasets.FashionMNIST(
+#         root=os.path.join(cwd, "data_transform"),
+#         train=True,
+#         download=False,
+#         transform=ToTensor(),
+#         target_transform=Lambda(lambda y: torch.zeros(10, dtype=torch.float).scatter_(0, torch.tensor(y), value=1))
+#     )
+# except Exception as e:
+#     print(e)
+#     ds = datasets.FashionMNIST(
+#         root=os.path.join(cwd, "data_transform"),
+#         train=True,
+#         download=True,
+#         transform=ToTensor(),
+#         target_transform=Lambda(lambda y: torch.zeros(10, dtype=torch.float).scatter_(0, torch.tensor(y), value=1))
+#     )
 #################################################
 # ToTensor()
 # -------------------------------

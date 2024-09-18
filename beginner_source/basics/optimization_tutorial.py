@@ -24,56 +24,45 @@ We load the code from the previous sections on `Datasets & DataLoaders <data_tut
 and `Build Model  <buildmodel_tutorial.html>`_.
 """
 
-import os
-import sys
+# import os
+# import sys
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
-from torchvision import datasets
-from torchvision.transforms import ToTensor
+# from torchvision import datasets
+# from torchvision.transforms import ToTensor
 from pympler import asizeof
 from memory_profiler import memory_usage
+from data_download import training_data, test_data, estimate_dataset_memory_usage
 
 
-cwd = os.path.dirname(__file__)
-try: # 检测数据集是否已下载
-    training_data = datasets.FashionMNIST(
-        root=os.path.join(cwd, "data"),
-        train=True,
-        download=False,
-        transform=ToTensor()
-    )
-    test_data = datasets.FashionMNIST(
-        root=os.path.join(cwd, "data"),
-        train=False,
-        download=False,
-        transform=ToTensor()
-    )
-except:
-    training_data = datasets.FashionMNIST(
-        root=os.path.join(cwd, "data"),
-        train=True,
-        download=True,
-        transform=ToTensor()
-    )
-    test_data = datasets.FashionMNIST(
-        root=os.path.join(cwd, "data"),
-        train=False,
-        download=True,
-        transform=ToTensor()
-    )
-
-def estimate_dataset_memory_usage(dataset):
-    # 假设数据集中的每个样本大小都相似
-    sample_size = 0
-    calc_size = 1000
-    for i in range(calc_size):  # 取前calc_size个样本作为样本大小的估计
-        img, label = dataset[i]
-        sample_size += img.element_size() * img.nelement()
-    
-    total_samples = len(dataset)
-    estimated_size = (sample_size / calc_size) * total_samples  # 估计整个数据集的大小
-    return estimated_size, calc_size
+# cwd = os.path.dirname(__file__)
+# try: # 检测数据集是否已下载
+#     training_data = datasets.FashionMNIST(
+#         root=os.path.join(cwd, "data"),
+#         train=True,
+#         download=False,
+#         transform=ToTensor()
+#     )
+#     test_data = datasets.FashionMNIST(
+#         root=os.path.join(cwd, "data"),
+#         train=False,
+#         download=False,
+#         transform=ToTensor()
+#     )
+# except:
+#     training_data = datasets.FashionMNIST(
+#         root=os.path.join(cwd, "data"),
+#         train=True,
+#         download=True,
+#         transform=ToTensor()
+#     )
+#     test_data = datasets.FashionMNIST(
+#         root=os.path.join(cwd, "data"),
+#         train=False,
+#         download=True,
+#         transform=ToTensor()
+#     )
 
 
 estimated_size, calc_size = estimate_dataset_memory_usage(training_data)

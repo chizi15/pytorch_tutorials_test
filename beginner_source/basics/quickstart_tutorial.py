@@ -25,8 +25,10 @@ the ``Dataset``.
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
-from torchvision import datasets
-from torchvision.transforms import ToTensor
+# from torchvision import datasets
+# from torchvision.transforms import ToTensor
+from data_download import training_data, test_data
+
 
 ######################################################################
 # PyTorch offers domain-specific libraries such as `TorchText <https://pytorch.org/text/stable/index.html>`_,
@@ -38,21 +40,21 @@ from torchvision.transforms import ToTensor
 # use the FashionMNIST dataset. Every TorchVision ``Dataset`` includes two arguments: ``transform`` and
 # ``target_transform`` to modify the samples and labels respectively.
 
-# Download training data from open datasets.
-training_data = datasets.FashionMNIST(
-    root="data",
-    train=True,
-    download=True,
-    transform=ToTensor(),
-)
+# # Download training data from open datasets.
+# training_data = datasets.FashionMNIST(
+#     root="data",
+#     train=True,
+#     download=True,
+#     transform=ToTensor(),
+# )
 
-# Download test data from open datasets.
-test_data = datasets.FashionMNIST(
-    root="data",
-    train=False,
-    download=True,
-    transform=ToTensor(),
-)
+# # Download test data from open datasets.
+# test_data = datasets.FashionMNIST(
+#     root="data",
+#     train=False,
+#     download=True,
+#     transform=ToTensor(),
+# )
 
 ######################################################################
 # We pass the ``Dataset`` as an argument to ``DataLoader``. This wraps an iterable over our dataset, and supports
