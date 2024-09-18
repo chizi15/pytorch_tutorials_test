@@ -25,11 +25,14 @@ and `Build Model  <buildmodel_tutorial.html>`_.
 """
 
 import os
+import sys
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
+from pympler import asizeof
+from memory_profiler import memory_usage
 
 
 cwd = os.path.dirname(__file__)
@@ -60,8 +63,40 @@ except:
         transform=ToTensor()
     )
 
+def estimate_dataset_memory_usage(dataset):
+    # 假设数据集中的每个样本大小都相似
+    sample_size = 0
+    calc_size = 1000
+    for i in range(calc_size):  # 取前calc_size个样本作为样本大小的估计
+        img, label = dataset[i]
+        sample_size += img.element_size() * img.nelement()
+    
+    total_samples = len(dataset)
+    estimated_size = (sample_size / calc_size) * total_samples  # 估计整个数据集的大小
+    return estimated_size, calc_size
+
+
+estimated_size, calc_size = estimate_dataset_memory_usage(training_data)
+print(f"取training_data的前{calc_size}个样本的平均内存占用大小，用来估计其内存占用大小: {round(estimated_size/(1024*1024), 2)} M字节")
+estimated_size, calc_size = estimate_dataset_memory_usage(test_data)
+print(f"取test_data的前{calc_size}个样本的平均内存占用大小，用来估计其内存占用大小: {round(estimated_size/(1024*1024), 2)} M字节\n")
+
+print(f"用asizeof.asizeof计算training_data数据集的位置和其他元数据占用的内存空间大小: {asizeof.asizeof(training_data)} 字节")
+print(f"用asizeof.asizeof计算test_data数据集的位置和其他元数据占用的内存空间大小: {asizeof.asizeof(test_data)} 字节\n")
+# # 使用第二种方法计算内存占用
+# print(f"用sys.getsizeof计算training_data数据集的位置和其他元数据占用的内存空间大小: {sys.getsizeof(training_data)} 字节")
+# print(f"用sys.getsizeof计算test_data数据集的位置和其他元数据占用的内存空间大小: {sys.getsizeof(test_data)} 字节")
+# # 使用第三种方法计算内存占用
+# print(f"用__sizeof__()计算training_data数据集的位置和其他元数据占用的内存空间大小: {training_data.__sizeof__()} 字节")
+# print(f"用__sizeof__()计算test_data数据集的位置和其他元数据占用的内存空间大小: {test_data.__sizeof__()} 字节\n")
+
+
 train_dataloader = DataLoader(training_data, batch_size=64)
 test_dataloader = DataLoader(test_data, batch_size=64)
+
+print(f"使用asizeof.asizeof计算train_dataloader对象数据集的位置和其他元数据的内存占用:{asizeof.asizeof(train_dataloader)}")
+print(f"使用asizeof.asizeof计算train_dataloader对象数据集的位置和其他元数据的内存占用:{asizeof.asizeof(test_dataloader)}\n")
+
 
 class NeuralNetwork(nn.Module):
     def __init__(self):
