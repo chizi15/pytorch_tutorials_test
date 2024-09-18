@@ -24,25 +24,41 @@ We load the code from the previous sections on `Datasets & DataLoaders <data_tut
 and `Build Model  <buildmodel_tutorial.html>`_.
 """
 
+import os
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
 
-training_data = datasets.FashionMNIST(
-    root="data",
-    train=True,
-    download=True,
-    transform=ToTensor()
-)
 
-test_data = datasets.FashionMNIST(
-    root="data",
-    train=False,
-    download=True,
-    transform=ToTensor()
-)
+cwd = os.path.dirname(__file__)
+try: # 检测数据集是否已下载
+    training_data = datasets.FashionMNIST(
+        root=os.path.join(cwd, "data"),
+        train=True,
+        download=False,
+        transform=ToTensor()
+    )
+    test_data = datasets.FashionMNIST(
+        root=os.path.join(cwd, "data"),
+        train=False,
+        download=False,
+        transform=ToTensor()
+    )
+except:
+    training_data = datasets.FashionMNIST(
+        root=os.path.join(cwd, "data"),
+        train=True,
+        download=True,
+        transform=ToTensor()
+    )
+    test_data = datasets.FashionMNIST(
+        root=os.path.join(cwd, "data"),
+        train=False,
+        download=True,
+        transform=ToTensor()
+    )
 
 train_dataloader = DataLoader(training_data, batch_size=64)
 test_dataloader = DataLoader(test_data, batch_size=64)
